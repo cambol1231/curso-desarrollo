@@ -5,6 +5,9 @@ const brands = require('./routes/brands')
 const login = require('./routes/login')
 const Personal = require('./routes/Personal')
 const Materiales = require('./routes/Materiales')
+const Recuperacion = require('./routes/Recuperacion')
+const RecuperacionAuditoria = require('./routes/Recuperacion Auditoria')
+
 
 
 module.exports = [
@@ -14,5 +17,7 @@ module.exports = [
     brands,
     login,
     Personal,
-    Materiales
+    Materiales,
+    Recuperacion,
+    RecuperacionAuditoria
 ]
