@@ -11,16 +11,22 @@ router
 
     .get('/Perfil', async(req, res) => {
     try {
-        const sql = `SELECT p.idProc_Recupera, per.Correo,m.Descripcion, um.Descripcion, p.Cantidad
-        FROM greenreportbdpruebas.proc_recupera_autori pa
-        left join greenreportbdpruebas.proc_recupera p on pa.idPorc_Recupera = p.idProc_Recupera
-        left join greenreportbdpruebas.material m on p.idMaterialRec  = m.idMaterial
-        left join greenreportbdpruebas.unidaddemedida um on um.idUnidadDeMedida = p.idUnidadMedida
-        left join greenreportbdpruebas.personal per on per.idPersonal = p.idPersonalRec;`;
-        const data = await DB.query(sql);
-        res.json(data)
+        const response = await DB.query(`SELECT p.Nombre, c.Cargo, convert (pe.cantidad , float)*convert (co2.cantidaddeco2 , float) as Aporte
+        FROM greenreportbdpruebas.personal p
+        inner join greenreportbdpruebas.cargo c on c.id = p.idCargo
+        inner join greenreportbdpruebas.usuario u on p.idPersonal = u.idPersonal
+        inner join greenreportbdpruebas.permisos per on u.id = per.idUsuario
+        inner join greenreportbdpruebas.rol r on r.idRol = per.idRol
+        left join greenreportbdpruebas.proc_recupera pe on p.idPersonal = pe.idPersonalRec
+        inner join greenreportbdpruebas.proc_recupera_autori pa on pa.idPorc_Recupera = pe.idProc_Recupera
+        left join greenreportbdpruebas.material m on pe.idMaterialRec  = m.idMaterial
+        left join greenreportbdpruebas.unidaddemedida um on um.idUnidadDeMedida = pe.idUnidadMedida
+        left join greenreportbdpruebas.co2material co2 on co2.idMaterial = m.idMaterial
+        where p.correo = ?`, [req.body.Correo])
+        res.json({ status: 'ok', response })
     } catch (error) {
         res.json({ status: 'error', error })
+        console.log(error)
     }
 })
 
