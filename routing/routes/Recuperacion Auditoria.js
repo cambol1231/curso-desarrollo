@@ -24,6 +24,20 @@ router
     }
 })
 
+.post('/RecuperacionAuditoria', async(req, res) => {
+    try {
+        const response = await DB.query(`INSERT INTO proc_recupera_autori (idPorc_Recupera, idPersonal, idMaterial, CantidadMaterial, idUnidadMedida)  VALUES (?,?,?,?,?)`, [req.body.idPorc_Recupera, req.body.idPersonal, req.body.idMaterial, req.body.CantidadMaterial, req.body.idUnidadMedida]);
+        Object.assign(response, { created_at: new Date() })
+        const fecha = req.body.idPorc_Recupera
+        await DB.query(`UPDATE ?? SET Fecha_Proc_Recupera_Autor=? WHERE idPorc_Recupera = ?;`, ['proc_recupera_autori', new Date(), fecha]);
+        await DB.query(`UPDATE ?? SET created_at =? WHERE idPorc_Recupera = ?;`, ['proc_recupera_autori', new Date(), fecha]);
+        await DB.query(`UPDATE ?? SET idCO2Material =(Select distinct idCO2Material from co2material where idmaterial = ?) WHERE idPorc_Recupera = ?;`, ['proc_recupera_autori', req.body.idMaterial, fecha]);
+        res.json({ status: 'ok', response })
+    } catch (error) {
+        res.json({ status: 'error', error })
+        console.log(error)
+    }
+})
 
 
 

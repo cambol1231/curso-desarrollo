@@ -24,6 +24,23 @@ router
 })
 
 
+.post('/Recuperacion', async(req, res) => {
+    try {
+        const data = req.body
+        const [id] = await DB.query('SELECT idPersonal FROM personal where correo = ?', [req.body.correo]);
+        const response = await DB.query(`INSERT INTO proc_recupera (idProc_Recupera, idPersonalRec, idMaterialRec, idUnidadMedida, Cantidad)  VALUES (?,?,?,?,?)`, [req.body.idProc_Recupera, id.idPersonal, req.body.idMaterialRec, req.body.idUnidadMedida, req.body.Cantidad])
+        Object.assign(response, { created_at: new Date() })
+        const fecha = req.body.idProc_Recupera;
+        await DB.query(`UPDATE ?? SET fechaRecuperación=? WHERE idProc_Recupera = ?;`, ['proc_recupera', new Date(), fecha])
+        await DB.query(`UPDATE ?? SET created_at=? WHERE idProc_Recupera = ?;`, ['proc_recupera', new Date(), fecha])
+
+        res.json({ status: 'ok', response })
+    } catch (error) {
+        res.json({ status: 'error', error })
+        console.log(error)
+    }
+})
+
 
 
 module.exports = router;
