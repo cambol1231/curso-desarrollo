@@ -26,7 +26,8 @@ router
 
 .post('/RecuperacionAuditoria', async(req, res) => {
     try {
-        const response = await DB.query(`INSERT INTO proc_recupera_autori (idPorc_Recupera, idPersonal, idMaterial, CantidadMaterial, idUnidadMedida)  VALUES (?,?,?,?,?)`, [req.body.idPorc_Recupera, req.body.idPersonal, req.body.idMaterial, req.body.CantidadMaterial, req.body.idUnidadMedida]);
+        const [id] = await DB.query('SELECT idPersonal FROM personal where correo = ?', [req.body.correo]);
+        const response = await DB.query(`INSERT INTO proc_recupera_autori (idPorc_Recupera, idPersonal, idMaterial, CantidadMaterial, idUnidadMedida)  VALUES (?,?,?,?,?)`, [req.body.idPorc_Recupera, id.idPersonal, req.body.idMaterial, req.body.CantidadMaterial, req.body.idUnidadMedida]);
         Object.assign(response, { created_at: new Date() })
         const fecha = req.body.idPorc_Recupera
         await DB.query(`UPDATE ?? SET Fecha_Proc_Recupera_Autor=? WHERE idPorc_Recupera = ?;`, ['proc_recupera_autori', new Date(), fecha]);
