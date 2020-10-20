@@ -11,7 +11,8 @@ router
 
     .post('/Perfil', async(req, res) => {
     try {
-        const sql = await DB.query(`SELECT p.Nombre, r.Descripcion as rol , convert (pe.cantidad , float)*convert (co2.cantidaddeco2 , float) as Aporte
+        const correo = req.body.correo
+        const sql = await DB.query(`SELECT p.Nombre, r.Descripcion as rol , sum(convert (pe.cantidad , float))*sum(convert (co2.cantidaddeco2 , float)) as Aporte
         FROM greenreportbdpruebas.personal p
         inner join greenreportbdpruebas.cargo c on c.id = p.idCargo
         inner join greenreportbdpruebas.usuario u on p.idPersonal = u.idPersonal
@@ -22,9 +23,8 @@ router
         left join greenreportbdpruebas.material m on pe.idMaterialRec  = m.idMaterial
         left join greenreportbdpruebas.unidaddemedida um on um.idUnidadDeMedida = pe.idUnidadMedida
         left join greenreportbdpruebas.co2material co2 on co2.idMaterial = m.idMaterial
-        where p.correo = ?`, [req.body.correo])
+        where p.correo = ? Group by p.Nombre, r.Descripcion`, [correo])
         const data = sql
-        console.log(data)
         res.json(data)
 
     } catch (error) {
