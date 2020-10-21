@@ -76,12 +76,10 @@ router
 
 .post('/permisos', async(req, res) => {
     try {
-        const data = req.body
-        const [Rol] = await DB.query('SELECT idRol,Descripcion FROM greenreportbdpruebas.rol where Descripcion =?', [req.body.Descripcion])
-        const [Usuario] = await DB.query('SELECT id, correo FROM greenreportbdpruebas.usuario where correo =?', [req.body.Correo])
-        const id = Rol.idRol
+        const data = req.body.Descripcion
+        const [Usuario] = await DB.query('SELECT id, correo FROM usuario where correo =?', [req.body.Correo])
         const usuarioid = Usuario.id
-        const response = await DB.query(`INSERT INTO permisos (idRol,idUsuario)VALUES (?,?);`, [id, usuarioid])
+        const response = await DB.query(`INSERT INTO permisos (idRol,idUsuario)VALUES (?,?);`, [data, usuarioid])
         Object.assign(response, { created_at: new Date() })
         res.json({ status: 'ok', response })
     } catch (error) {
