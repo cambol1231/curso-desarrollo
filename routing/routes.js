@@ -8,6 +8,7 @@ const Materiales = require('./routes/Materiales')
 const Recuperacion = require('./routes/Recuperacion')
 const RecuperacionAuditoria = require('./routes/Recuperacion Auditoria')
 const Perfil = require('./routes/Perfil')
+const Accesos = require('./routes/Accesos')
 
 
 
@@ -21,5 +22,6 @@ module.exports = [
     Materiales,
     Recuperacion,
     RecuperacionAuditoria,
-    Perfil
+    Perfil,
+    Accesos
 ]
