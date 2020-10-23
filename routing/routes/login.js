@@ -20,8 +20,10 @@ router
            } else {*/
         //   console.log("2");
         const { username, password } = data;
-        const sql = `SELECT  u.id,  u.correo, u.idContraseña  
-        FROM greenreportbdpruebas.usuario u inner join greenreportbdpruebas.contraseñas c on c.id = u.idContraseña 
+        const sql = `SELECT  u.id,  u.correo, u.idContraseña , p.idRol as rol  
+        FROM usuario u 
+        inner join contraseñas c on c.id = u.idContraseña 
+        inner join permisos p on p.idUsuario = u.id
         where correo = ?`;
         const [user] = await DB.query(sql, username);
         if (!user) {
