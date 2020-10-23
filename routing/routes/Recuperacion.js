@@ -29,7 +29,7 @@ router
         const [id] = await DB.query('SELECT idPersonal FROM personal where correo = ?', [req.body.correo]);
         const response = await DB.query(`INSERT INTO proc_recupera (idPersonalRec, idMaterialRec, idUnidadMedida, Cantidad)  VALUES (?,?,?,?)`, [id.idPersonal, req.body.idMaterialRec, req.body.idUnidadMedida, req.body.Cantidad])
         Object.assign(response, { created_at: new Date() })
-        const [consecutivo] = await DB.query('SELECT max(idProc_recupera) as Consecutivo  FROM proc_recupera;');
+        const [consecutivo] = await DB.query('SELECT max(idProc_recupera) +1 as Consecutivo  FROM proc_recupera;');
         const fecha = consecutivo.Consecutivo;
         console.log(consecutivo.Consecutivo)
         await DB.query(`UPDATE ?? SET fechaRecuperación=? WHERE idProc_Recupera = ?;`, ['proc_recupera', new Date(), fecha])

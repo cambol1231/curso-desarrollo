@@ -8,16 +8,16 @@ app.use(bodyParser.urlencoded({ extended: true }))
 app.use(bodyParser.json({ extended: true }))
 
 app.get('/', (req, res) => {
-  res.json({ status: 'success'})
+    res.json({ status: 'success' })
 })
 
 const routes = require('./routing/routes')
 app.use('/api/v1.0/', routes)
 
 app.get('*', (req, res) => {
-  res.status(401).json({ status: 'error'})
+    res.status(401).json({ status: 'error' })
 })
 
 app.listen(port, () => {
-  console.log(`Servidor funcionando en localhost: ${port}`)
+    console.log(`Servidor funcionando en localhost: ${port}`)
 });
